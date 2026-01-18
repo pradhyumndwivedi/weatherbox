@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-chubby/css/uicons-solid-chubby.css'>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta http-equiv="refresh" content="5">
+    <title>WeatherBox</title>
+</head>
+<!-- from-slate-700 to-gray-900 -->
+
+<body>
+    {% if not connected %}
+    <div class="flex flex-col w-screen h-screen justify-center items-center bg-linear-to-bl from-slate-800 to-gray-950">
+        <h1 class="text-2xl text-gray-100 font-semibold">WeatherBox not connected!</h1>
+    </div>
+    {% else %}
+    <div class="flex flex-col w-screen h-screen justify-center items-center bg-linear-to-bl {{colorstr}}">
+        <div
+            class="w-xs md:w-5xl mt-4 h-xl bg-gray-100/10 backdrop-blur-md rounded-lg p-2 shadow-xl ring-gray-900/5 justify-between flex flex-row">
+            <div class="w-4/6 md:w-max h-xl flex flex-row">
+                <i class="fi fi-sc-marker justify-center text-gray-100 mx-2 md:mr-2 mt-0.5"></i>
+                <h1 class="text-sm md:text-base pt-0.5 text-gray-100 font-medium">{{locationstr}}</h1>
+            </div>
+
+            <div class="w-2/6 md:w-max h-xl flex flex-row justify-end pr-2 md:px-4">
+                {% if day %}
+                <i class="fi fi-sc-sun justify-center text-gray-100 mx-2 md:mr-2 mt-0.5"></i>
+                {% else %}
+                <i class="fi fi-sc-moon justify-center text-gray-100 mx-2 md:mr-2 mt-0.5"></i>
+                {% endif %}
+                <h1 class="text-sm md:text-base pt-0.5 text-gray-100 font-medium ">{{currtime}}</h1>
+            </div>
+        </div>
+        <div
+            class="w-xs md:w-5xl h-xl mb-4 mt-4 md:my-6 bg-gray-100/10 backdrop-blur-md rounded-lg p-4 shadow-xl ring-gray-900/5">
+            <div class="flex flex-row w-full pt-2 md:pt-4 px-4 justify-between">
+                <div class="flex flex-col">
+                    <h1 class="text-4xl md:text-5xl text-gray-100 font-bold">{{currdata[0]}}&deg;C</h1>
+                    <h1 class="text-xl md:text-2xl text-gray-100 font-semibold">{{currlabel}}</h1>
+                </div>
+                <div class="flex flex-col justify-center">
+                    {% if currlabel == "Breezy" %}
+                    <i class="fi fi-sc-snow-blowing text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Clear" %}
+                    <i class="fi fi-sc-sun text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Drizzle" %}
+                    <i class="fi fi-sc-cloud-sun-rain text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Dry" %}
+                    <i class="fi fi-sc-heat text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Foggy" %}
+                    <i class="fi fi-sc-smog text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Humid" %}
+                    <i class="fi fi-sc-humidity text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Rain" %}
+                    <i class="fi fi-sc-cloud-showers text-6xl my-1 text-gray-100 text-center"></i>
+                    {% elif currlabel == "Windy"%}
+                    <i class="fi fi-sc-wind text-6xl my-1 text-gray-100 text-center"></i>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="h-lg w-full p-2 md:p-4 md:py-6 mt-2 md:mt-4 scroll-smooth overflow-x-auto"
+                style="scrollbar-width: none;">
+                <div class="flex flex-row justify-start scroll-smooth">
+                    {% for i in range(10) %}
+                    <div class="p-2 mr-4 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center">
+                        <h1 class="text-gray-100 w-[65px] text-center opacity-70 text-sm">{{timelabels[i]}}</h1>
+                        {% if predlabels[i] == "Breezy" %}
+                        <i class="fi fi-sc-snow-blowing text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Clear" %}
+                        <i class="fi fi-sc-sun text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Drizzle" %}
+                        <i class="fi fi-sc-cloud-sun-rain text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Dry" %}
+                        <i class="fi fi-sc-heat text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Foggy" %}
+                        <i class="fi fi-sc-smog text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Humid" %}
+                        <i class="fi fi-sc-humidity text-3xl my-1 text-gray-100 text-center"></i>
+                        {% elif predlabels[i] == "Rain" %}
+                        <i class="fi fi-sc-cloud-showers text-3xl my-1 text-gray-100 text-center"></i>
+                        {% else %}
+                        <i class="fi fi-sc-wind text-3xl my-1 text-gray-100 text-center"></i>
+                        {% endif %}
+                        <h1 class="text-gray-100 text-md text-center">{{predlist[i][0]}}&deg;C</h1>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div
+            class="w-xs md:w-5xl p-4 py-4 md:py-6 bg-gray-100/10 backdrop-blur-md rounded-lg shadow-xl ring-gray-900/5 mb-10">
+            <div class="hidden md:flex flex-row justify-center">
+                <div
+                    class="w-xs md:w-md p-2 py-4 mx-3 mb-4 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                    <h1 class="text-gray-100 text-center w-full text-xl font-semibold mb-2">Humidity</h1>
+                    <i class="fi fi-sc-humidity text-5xl my-1 text-gray-100 text-center"></i>
+                    <h1 class="text-gray-100 text-xl font-semibold text-center mt-2">{{dispdata[0]}}%</h1>
+                </div>
+                <div
+                    class="w-xs md:w-md p-2 py-4 mx-3 mb-4 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                    <h1 class="text-gray-100 text-center w-full text-xl font-semibold mb-2">Pressure</h1>
+                    <i class="fi-sc-tachometer text-5xl my-1 text-gray-100 text-center"></i>
+                    <h1 class="text-gray-100 text-xl font-semibold text-center mt-2">{{dispdata[1]}} hPa</h1>
+                </div>
+                <div
+                    class="w-xs md:w-md p-2 py-4 mx-3 mb-4 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                    <h1 class="text-gray-100 text-center w-full text-xl font-semibold mb-2">Wind Speed</h1>
+                    <i class="fi fi-sc-fan text-5xl my-1 text-gray-100 text-center"></i>
+                    <h1 class="text-gray-100 text-xl font-semibold text-center mt-2">{{dispdata[2]}} km/h</h1>
+                </div>
+                <div
+                    class="w-xs md:w-md p-2 py-4 mx-3 mb-4 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                    <h1 class="text-gray-100 text-center w-full text-xl font-semibold mb-2">Altitude</h1>
+                    <i class="fi fi-sc-mountain text-5xl my-1 text-gray-100 text-center"></i>
+                    <h1 class="text-gray-100 text-xl font-semibold text-center mt-2">{{dispdata[3]}} m</h1>
+                </div>
+                <div
+                    class="w-xs md:w-md p-2 py-4 mx-3 mb-4 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                    <h1 class="text-gray-100 text-center w-full text-xl font-semibold mb-2">Coordinates</h1>
+                    <i class="fi fi-sc-map-marker text-5xl my-1 text-gray-100 text-center"></i>
+                    <h1 class="text-gray-100 text-sm font-semibold text-center mt-3">{{dispdata[4]}}° N,
+                        {{dispdata[5]}}° E</h1>
+                </div>
+            </div>
+            <div class="flex flex-col md:hidden">
+                <div class="flex flex-row">
+                    <div
+                        class="w-xs p-2 py-2 mx-3 mb-3 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                        <h1 class="text-gray-100 text-center w-full text-md font-semibold mb-1">Humidity</h1>
+                        <i class="fi fi-sc-humidity text-2xl text-gray-100 text-center"></i>
+                        <h1 class="text-gray-100 text-sm font-semibold text-center">{{dispdata[0]}}%</h1>
+                    </div>
+                    <div
+                        class="w-xs p-2 py-2 mx-3 mb-3 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                        <h1 class="text-gray-100 text-center w-full text-md font-semibold mb-1">Pressure</h1>
+                        <i class="fi fi-sc-tachometer text-2xl text-gray-100 text-center"></i>
+                        <h1 class="text-gray-100 text-sm font-semibold text-center">{{dispdata[1]}} hPa</h1>
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <div
+                        class="w-xs p-2 py-2 mx-3 mb-3 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                        <h1 class="text-gray-100 text-center w-full text-md font-semibold mb-1">Wind Speed</h1>
+                        <i class="fi fi-sc-fan text-2xl text-gray-100 text-center"></i>
+                        <h1 class="text-gray-100 text-sm font-semibold text-center">{{dispdata[2]}} km/h</h1>
+                    </div>
+                    <div
+                        class="w-xs p-2 py-2 mx-3 mb-3 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                        <h1 class="text-gray-100 text-center w-full text-md font-semibold mb-1">Altitude</h1>
+                        <i class="fi fi-sc-mountain text-2xl text-gray-100 text-center"></i>
+                        <h1 class="text-gray-100 text-sm font-semibold text-center">{{dispdata[3]}} m</h1>
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <div
+                        class="w-xs p-2 py-2 mx-3 md:mb-0 bg-gray-100/10 shadow-lg rounded-lg flex flex-col align-center ">
+                        <h1 class="text-gray-100 text-center w-full text-md font-semibold mb-1">Coordinates</h1>
+                        <i class="fi fi-sc-map-marker text-2xl text-gray-100 text-center"></i>
+                        <h1 class="text-gray-100 text-sm font-semibold text-center">{{dispdata[4]}}° N, {{dispdata[5]}}°
+                            E</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>
