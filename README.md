@@ -1,4 +1,4 @@
-# 🌦️ WeatherBox – Real-Time Weather Prediction System
+#  WeatherBox – Real-Time Weather Prediction System
 
 ## Overview
 
